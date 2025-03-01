@@ -1,20 +1,45 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function LanguageSwitcher() {
   const router = useRouter();
+  const pathname = usePathname();
 
   const changeLanguage = (newLocale) => {
-    router.push(`/${newLocale}`); // Change URL to switch locale
+    const newPath = `/${newLocale}${pathname.replace(/^\/[a-z]{2}/, "")}`; // Keep the same path, just change the locale
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user-locale", newLocale); // Save selected language
+    }
+    router.push(newPath);
   };
 
   return (
-    <div>
-      <button onClick={() => changeLanguage("en")}>🇬🇧 English</button>
-      <button onClick={() => changeLanguage("am")}>🇦🇲 Հայերեն</button>
-      <button onClick={() => changeLanguage("ar")}>🇦🇪 العربية</button>
-      <button onClick={() => changeLanguage("ru")}>🇷🇺 Русский</button>
+    <div className="flex space-x-2">
+      <button
+        onClick={() => changeLanguage("en")}
+        className="p-2 border rounded"
+      >
+        🇬🇧 English
+      </button>
+      <button
+        onClick={() => changeLanguage("am")}
+        className="p-2 border rounded"
+      >
+        🇦🇲 Հայերեն
+      </button>
+      <button
+        onClick={() => changeLanguage("ar")}
+        className="p-2 border rounded"
+      >
+        🇦🇪 العربية
+      </button>
+      <button
+        onClick={() => changeLanguage("ru")}
+        className="p-2 border rounded"
+      >
+        🇷🇺 Русский
+      </button>
     </div>
   );
 }
